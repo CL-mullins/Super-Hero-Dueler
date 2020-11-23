@@ -46,12 +46,19 @@ class Hero:
         #hero_choice = [self, opponent]
         #Check to see if hero has abilities, if no abilities, print draw
         if len(self.abilities) > 0 or len(opponent.abilities) > 0:
-            while(self.is_alive() == True and opponent.is_alive() == True):
+            while(self.is_alive() and opponent.is_alive()):
                 #Start fighting loop until a hero has won
-                print(f'{self.name} attacked {opponent.name}!')
+                print(f'{opponent.name} attacked {self.name}!')
                 self.take_damage(opponent.attack())
                 print(f"{self.name}'s remaining health: {self.current_health}")
+                print(f'{self.name} attacked {opponent.name}!')
                 opponent.take_damage(self.attack())
+                print(f"{opponent.name}'s remaining health: {opponent.current_health}")
+
+            if not self.is_alive():
+                print(f"\n{self.name} has been defeated by {opponent.name}\n".upper())
+            elif not opponent.is_alive():
+                print(f"\n{opponent.name} has been defeated by {self.name}\n".upper())
         else:
             print("Draw!")
         #print(f'{random.choice(hero_choice)} wins!')
