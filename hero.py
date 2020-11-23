@@ -40,7 +40,7 @@ class Hero:
     def take_damage(self, damage):
         #Updates self.current_health to reflect damage taken
         #Minus the amount returned from calling self.defend(damage)
-        self.current_health -= (damage - self.defend(damage))
+        self.current_health -= (damage + self.defend(damage))
 
     def fight(self, opponent):
         #hero_choice = [self, opponent]
@@ -48,7 +48,9 @@ class Hero:
         if len(self.abilities) > 0 or len(opponent.abilities) > 0:
             while(self.is_alive() == True and opponent.is_alive() == True):
                 #Start fighting loop until a hero has won
+                print(f'{self.name} attacked {opponent.name}!')
                 self.take_damage(opponent.attack())
+                print(f"{self.name}'s remaining health: {self.current_health}")
                 opponent.take_damage(self.attack())
         else:
             print("Draw!")
