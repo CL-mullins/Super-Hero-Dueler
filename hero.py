@@ -24,40 +24,52 @@ class Hero:
         for ability in self.abilities:
             # add the damage of each attack to our running total
             total_damage += ability.attack()
-        #return the total damage    
-        return total_damage
+            #return the total damage    
+            return int(total_damage)
 
     def defend(self, damage_amt):
         #Calculate the total amount blocked from all armor blocks
         total_block = 0
         for armor in self.armor:
             #add the total armor score to block
-            total_block += armor.defend()
+            total_block += armor.block()
+            #TODO: Fix error here
         #return total damage mitigated
         return total_block
 
     def take_damage(self, damage):
         #Updates self.current_health to reflect damage taken
         #Minus the amount returned from calling self.defend(damage)
-        self.current_health -= damage - self.defend(damage)
+        self.current_health -= (damage - self.defend())
 
     def fight(self, opponent):
-        #Randomly choses between the selected hero and opponent as winner
-        hero_choice = [self.name, opponent.name]
-        #Returns winner
-        print(f'{random.choice(hero_choice)} wins!')
+        #hero_choice = [self, opponent]
+        #Check to see if hero has abilities, if no abilities, print draw
+        if len(self.abilities) > 0 or len(opponent.abilities) > 0:
+            while(self.is_alive() == True and opponent.is_alive() == True):
+                #Start fighting loop until a hero has won
+                self.take_damage(opponent.attack())
+                opponent.take_damage(self.attack())
+        else:
+            print("Draw!")
+        #print(f'{random.choice(hero_choice)} wins!')
+
+    def is_alive(self):
+        #checks to see if the hero is still alive
+        if self.current_health <= 0:
+            return False
+        else:
+            return True
         
 
 if __name__ == "__main__":
     my_hero = Hero('Grace Hopper',200)
-    print(my_hero.name)
-    print(my_hero.current_health)
-    hero1 = Hero("King")
-    hero2 = Hero("Queen")
-    ability = ("Shmoove", 25)
-    ability2 = ("Ice", 15)
+    hero1 = Hero('Dumbledore',200)
+    ability = ("Shmoove", 250)
+    ability2 = ("Ice", 150)
     shield = Armor("Shield", 50)
+    my_hero.add_ability(ability)
+    hero1.add_ability(ability2)
     my_hero.add_armor(shield)
-    my_hero.take_damage(50)
-    print(hero.current_health)
+    my_hero.fight(hero1)
     #hero1.fight(hero2)
