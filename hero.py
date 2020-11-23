@@ -40,7 +40,7 @@ class Hero:
     def take_damage(self, damage):
         #Updates self.current_health to reflect damage taken
         #Minus the amount returned from calling self.defend(damage)
-        self.current_health -= (damage - self.defend())
+        self.current_health -= (damage - self.defend(damage))
 
     def fight(self, opponent):
         #hero_choice = [self, opponent]
@@ -65,11 +65,13 @@ class Hero:
 if __name__ == "__main__":
     my_hero = Hero('Grace Hopper',200)
     hero1 = Hero('Dumbledore',200)
-    ability = ("Shmoove", 250)
-    ability2 = ("Ice", 150)
+    ability = Ability("Shmoove", 25)
+    ability2 = Ability("Ice", 15)
+    ability3 = Ability("Laugh", 30)
     shield = Armor("Shield", 50)
     my_hero.add_ability(ability)
     hero1.add_ability(ability2)
+    my_hero.add_ability(ability3)
     my_hero.add_armor(shield)
     my_hero.fight(hero1)
     #hero1.fight(hero2)
