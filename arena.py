@@ -10,8 +10,8 @@ class Arena:
 
     def __init__(self):
         #instantiate properties
-        self.team_one = team_one
-        self.team_two = team_two
+        self.team_one = Team("One")
+        self.team_two = Team("Two")
         self.previous_winner = None
 
     def create_ability(self):
@@ -78,13 +78,51 @@ class Arena:
         for i in range(numOfTeamMembers):
             hero = self.create_hero()
             self.team_one.add_hero(hero)
+        return self.team_one
 
     def build_team_two(self):
         #Prompt user to build team 2
+        team_two = Team("Team Two")
         numOfTeamMembers = int(input("How many members would you like on Team Two?\n"))
         for i in range(numOfTeamMembers):
             hero = self.create_hero()
             self.team_two.add_hero(hero)
+
+    def surviving_heroes(self, team):
+        #Return the survival count for a given team
+        survival_count = 0
+        for hero in team.heroes:
+            if hero.is_alive():
+                print(f"{hero.name} survived")
+                survival_count += 1
+        if not survival_count:
+            print("no heroes survived")
+        return survival_count
+
+    def kd_average(self, team):
+        #Prints kill/death average for given team
+        team_kills = 0
+        team_deaths = 0
+        for hero in team.heroes:
+            team_kills += hero.kills
+            team_deaths += hero.deaths
+        if team_deaths == 0:
+            team_deaths = 1
+        print(f"average K/D: {team_kills/team_deaths}")
+
+    def winning_team(self, team_one, team_one_survival_count, team_two, team_two_survival_count):
+        #Prints winning team for two given survival counts
+        if team_one_survival_count and team_two_survival_count:
+            print("{:=^50}".format("No winner could be declared").upper())
+            self.previous_winner = None
+        elif team_one_survival_count:
+            p = f"{team_one.name} won"
+            print("{:=^50}".format(p).upper())
+            self.previous_winner = team_one
+        else:
+            p = f"{team_two.name} won"
+            print("{:=^50}".format(p).upper())
+            self.previous_winner = team_two
 
     def team_battle(self, team_one, team_two):
         team_one.attack(team_two)
@@ -111,14 +149,18 @@ if __name__ == "__main__":
     # Instantiate Game Arena
     arena = Arena()
 
+    #Instantiate Team
+    team_one = Team("Team 1")
+    team_two = Team("Team 2")
+
     #Build Teams
     arena.build_team_one()
     arena.build_team_two()
 
     while game_is_running:
 
-        arena.team_battle()
-        arena.show_stats()
+        arena.team_battle(team_one, team_two)
+        arena.show_stats(team_one, team_two)
         play_again = input("Play Again? Y or N: ")
 
         #Check for Player Input
